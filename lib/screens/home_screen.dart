@@ -3,9 +3,78 @@ import 'package:encode_app/constants/app_colors.dart';
 import 'package:encode_app/widgets/profile_drawer.dart';
 import 'package:encode_app/widgets/shared_bottom_nav.dart';
 import 'package:encode_app/screens/analysis_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: source);
+    
+    if (image != null) {
+      // For now, we'll just navigate to AnalysisScreen with the path or handle it
+      // In a real app, you might want to upload it first or pass the file
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AnalysisScreen(query: "Selected Image: ${image.name}"),
+        ),
+      );
+    }
+  }
+
+  Future<void> _pickFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+       Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AnalysisScreen(query: "Selected File: ${result.files.single.name}"),
+        ),
+      );
+    }
+  }
+
+  void _showUploadOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Upload Image from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(context, ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.file_present),
+                title: const Text('Upload File'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickFile(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,13 +217,13 @@ class HomeScreen extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.camera_alt, color: Colors.black54),
                       onPressed: () {
-                        // Camera Action
+                        _pickImage(context, ImageSource.camera);
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                          // Action
+                        _showUploadOptions(context);
                       },
                     )
                   ],
