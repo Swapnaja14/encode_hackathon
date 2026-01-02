@@ -1,11 +1,8 @@
 import express from "express";
-import multer from "multer";
-import { analyzeProduct } from "../controllers/analyze.controller.js";
+import { analyzeIngredients } from "../controllers/analyze.controller.js";
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
 
-router.post("/text", analyzeProduct);
-router.post("/image", upload.single("image"), analyzeProduct);
+router.post("/analyze", analyzeIngredients);
 
 export default router;
