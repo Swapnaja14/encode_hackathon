@@ -1,5 +1,5 @@
 import express from 'express';
-import {getHealthFact, analyseProduct, followUpQuestions} from '../controllers/ai.js';
+import {getHealthFact, analyseProduct, followUpQuestions, testGemini} from '../controllers/ai.js';
 
 const router = express.Router();
 

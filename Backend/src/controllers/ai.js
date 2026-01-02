@@ -32,3 +32,14 @@ export const followUpQuestions = (req, res) => {
 
     res.json({ reply });
 }
+
+// import model from "../services/gemini.client.js";
+
+// export const testGemini = async (req, res) => {
+//   try {
+//     const result = await model.generateContent("Hello Gemini");
+//     res.json({ response: result.response.text() });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
