@@ -1,26 +1,24 @@
-import express from 'express';
-import cors from "cors";
-import aiRoutes from './routes/ai.js';
+import express from "express";
+import dotenv from "dotenv";
+import analyzeRoute from "./routes/analyze.route.js";
+
+dotenv.config();
 
 const app = express();
-const port = 8001;
 
-app.use(cors());
+// middleware
 app.use(express.json());
 
-app.use("/api/ai", aiRoutes);
+// routes
+app.use("/api", analyzeRoute);
 
+// health check (optional but professional)
 app.get("/", (req, res) => {
-    res.send("Backend is running on port 8001");
+  res.send("AI Food Copilot Server Running");
 });
 
-console.log("Attempting to start server...");
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+// server start
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-// Keep the process alive
-setInterval(() => {
-    // console.log("Heartbeat...");
-}, 10000);
