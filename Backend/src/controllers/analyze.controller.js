@@ -1,40 +1,25 @@
-import { extractIngredientsFromImage } from "../services/ingredient.service.js";
-import {
-  normalizeIngredients,
-  classifyIngredients,
-  inferUserIntent,
-  analyzeRisk,
-  explainToUser
-} from "../services/reasoning.service.js";
+import { normalizeIngredients } from "../services/ingredientNormalizer.js";
+import { understandIngredients } from "../services/ingredientUnderstanding.js";
+import { inferIntent } from "../services/intentInference.js";
+import { reasonAboutIngredients } from "../services/reasoningEngine.js";
+import { generateExplanation } from "../services/explanationGenerator.js";
 
-export async function analyzeProduct(req, res) {
+export async function analyzeIngredients(req, res) {
   try {
-    let ingredientText = req.body.ingredients;
-    const productType = req.body.productType || "Packaged food";
+    const { ingredientsText } = req.body;
 
-    // Image case
-    if (req.file) {
-      ingredientText = await extractIngredientsFromImage(req.file.path);
-    }
-
-    if (!ingredientText) {
-      return res.status(400).json({ error: "No ingredient text found" });
-    }
-
-    const normalized = await normalizeIngredients(ingredientText);
-    const classified = await classifyIngredients(normalized);
-    const intent = await inferUserIntent(productType, classified);
-    const risk = await analyzeRisk(intent.primary_concern, classified);
-    const explanation = await explainToUser(risk);
+    const normalized = await normalizeIngredients(ingredientsText);
+    const understanding = await understandIngredients(normalized);
+    const intent = await inferIntent(understanding);
+    const reasoning = await reasonAboutIngredients(understanding, intent);
+    const explanation = await generateExplanation(reasoning);
 
     res.json({
-      ingredients: normalized,
+      normalized,
       intent,
-      risk,
       explanation
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "AI processing failed" });
+    res.status(500).json({ error: err.message });
   }
 }
