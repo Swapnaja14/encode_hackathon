@@ -3,15 +3,24 @@ dotenv.config();
 
 import { GoogleGenAI } from "@google/genai";
 
-console.log("KEY:", process.env.GEMINI_API_KEY);
-
-const client = new GoogleGenAI({
+const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-const response = await client.models.generateContent({
-  model: "gemini-1.5-flash",
-  contents: "Say hello in one sentence",
+const result = await ai.models.generateContent({
+  model: "models/gemini-2.5-flash",
+  contents: [
+    {
+      role: "user",
+      parts: [{ text: "Say hello in one sentence." }],
+    },
+  ],
 });
 
-console.log(response.text);
+// ✅ correct extraction
+const text =
+  result.candidates?.[0]?.content?.parts
+    ?.map(p => p.text)
+    .join("");
+
+console.log(text);
