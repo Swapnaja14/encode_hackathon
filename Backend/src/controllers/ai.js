@@ -1,5 +1,4 @@
-import { use } from "react";
-import {extractIngredients, inferIntent, reasonAboutIngredients, generateFollowUp} from "../services/aiReasoning.js";
+import { extractIngredients, inferIntent, reasonAboutIngredients, generateFollowUp } from "../services/aiReasoning.js";
 
 export const getHealthFact = (req, res) => {
     const facts = [
@@ -12,24 +11,35 @@ export const getHealthFact = (req, res) => {
     ];
 
     const randomFact = facts[Math.floor(Math.random() * facts.length)];
-    res.json({fact : randomFact});
+    res.json({ fact: randomFact });
 };
 
 export const analyseProduct = (req, res) => {
-    const {inputType, content} = req.body;
+    const { inputType, content } = req.body;
     const ingredients = extractIngredients(inputType, content);
     const intent = inferIntent(ingredients);
     const reasoning = reasonAboutIngredients(ingredients);
-    
+
     res.json({
         inferredIntent: intent, reasoning,
         finalExplanation: reasoning.finalExplanation
     });
 };
 
-export const followUpQuestions = (req, res) =>  {
-    const {previousContent, userQuestion} = req.body;
+export const followUpQuestions = (req, res) => {
+    const { previousContent, userQuestion } = req.body;
     const reply = generateFollowUp(previousContent, userQuestion);
 
     res.json({ reply });
 }
+
+// import model from "../services/gemini.client.js";
+
+// export const testGemini = async (req, res) => {
+//   try {
+//     const result = await model.generateContent("Hello Gemini");
+//     res.json({ response: result.response.text() });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
