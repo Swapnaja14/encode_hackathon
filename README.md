@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Food Info Bot 🍎🤖
 
 Food Info Bot is an AI-powered assistant designed to help consumers understand food ingredients better. By leveraging advanced AI analysis, it provides concise, clear, and non-alarmist information about what's in your food, helping you make more informed dietary choices.
@@ -96,3 +97,21 @@ To connect the frontend to the backend, ensure the backend is running and update
 ## 📝 Disclaimer
 This bot provides general information based on ingredient lists. It does **not** provide medical advice. Always consult with a healthcare professional for dietary concerns.
 
+=======
+# encode_app
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+>>>>>>> frontend
